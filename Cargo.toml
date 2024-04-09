@@ -13,7 +13,9 @@ windows = {version = "0.54.0", features = [
   "Media_Control",
   "implement",
   "Win32_Foundation",
-  "Win32_System_Com"
+  "Win32_System_Com",
+  "Win32_System_Variant",
+  "Win32_System"
   ]}
 windows-interface = "0.53.0"
 
