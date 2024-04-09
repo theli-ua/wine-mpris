@@ -1,29 +1,25 @@
 #![allow(non_snake_case)]
+use std::sync::OnceLock;
+
+use log::{info, warn};
 use windows::{core::*, Win32::Foundation::*, Win32::System::WinRT::*};
-// use windows::Media::SystemMediaTransportControls;
 
-#[implement(IActivationFactory, ISystemMediaTransportControlsInterop)]
-struct ActivationFactory;
+// mod bindings;
+mod factory;
+mod propsys;
 
-impl IActivationFactory_Impl for ActivationFactory {
-    fn ActivateInstance(&self) -> Result<IInspectable> {
-        dbg!("AAA");
-        Err(E_NOTIMPL.into())
-    }
-}
+static LOG_INIT: OnceLock<()> = OnceLock::new();
 
-impl ISystemMediaTransportControlsInterop_Impl for ActivationFactory {
-    // Required method
-    fn GetForWindow(
-        &self,
-        appwindow: HWND,
-        riid: *const GUID,
-        mediatransportcontrol: *mut *mut std::ffi::c_void,
-    ) -> Result<()> {
-        dbg!(appwindow);
-        dbg!(unsafe { *riid });
-        unimplemented!()
-    }
+fn init_log() {
+    LOG_INIT.get_or_init(|| {
+        eprintln!("LOG IT");
+        env_logger::init();
+        env_logger::init();
+        // env_logger::Builder::from_default_env()
+        //     // .filter_level(log::LevelFilter::Info)
+        //     .target(env_logger::Target::Stderr)
+        //     .init()
+    });
 }
 
 #[no_mangle]
@@ -31,8 +27,7 @@ extern "system" fn DllGetActivationFactory(
     name: std::mem::ManuallyDrop<HSTRING>,
     result: *mut *mut std::ffi::c_void,
 ) -> HRESULT {
-    eprintln!("Hello World! {:?}", *name);
-
+    init_log();
     if result.is_null() {
         return E_POINTER;
     }
@@ -40,9 +35,11 @@ extern "system" fn DllGetActivationFactory(
     let mut factory: Option<IActivationFactory> = None;
 
     if *name == "Windows.Media.SystemMediaTransportControls" {
-        factory = Some(ActivationFactory.into());
+        info!("Returning factory SystemMediaTransportControls");
+        factory = Some(factory::ActivationFactory.into());
+    } else {
+        warn!("No factory for {}", *name);
     }
-    dbg!(&factory);
 
     // Dereferencing `result` is safe because we've validated that the pointer is not null and
     // transmuting `factory` is safe because `DllGetActivationFactory` is expected to return an
@@ -64,8 +61,7 @@ pub extern "system" fn DllGetClassObject(
     riid: *const GUID,
     result: *mut *mut std::ffi::c_void,
 ) -> HRESULT {
-    eprintln!("Hello World!!!! {rclsid:?}, {riid:?}");
+    init_log();
+    warn!("DllGetClassObject not implemented");
     CLASS_E_CLASSNOTAVAILABLE
 }
-
-mod propsys;
