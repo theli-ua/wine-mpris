@@ -13,12 +13,9 @@ static LOG_INIT: OnceLock<()> = OnceLock::new();
 fn init_log() {
     LOG_INIT.get_or_init(|| {
         eprintln!("LOG IT");
-        env_logger::init();
-        env_logger::init();
-        // env_logger::Builder::from_default_env()
-        //     // .filter_level(log::LevelFilter::Info)
-        //     .target(env_logger::Target::Stderr)
-        //     .init()
+        env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
+            .target(env_logger::Target::Stderr)
+            .init();
     });
 }
 
