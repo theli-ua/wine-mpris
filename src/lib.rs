@@ -4,7 +4,8 @@ use std::sync::OnceLock;
 use log::{info, warn};
 use windows::{core::*, Win32::Foundation::*, Win32::System::WinRT::*};
 
-mod bindings;
+pub mod bindings;
+pub mod controls;
 mod factory;
 mod propsys;
 
