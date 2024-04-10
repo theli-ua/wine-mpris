@@ -1,5 +1,10 @@
-use log::{info, warn};
-use windows::{core::implement, Foundation, Win32::Foundation::HWND};
+use log::{debug, info, warn};
+use windows::{
+    core::implement,
+    Foundation::{self, EventRegistrationToken},
+    Win32::Foundation::HWND,
+};
+use windows_core::HRESULT;
 
 use crate::bindings::Media::*;
 #[implement(SystemMediaTransportControls)]
@@ -14,7 +19,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         &self,
         value: windows::Media::MediaPlaybackStatus,
     ) -> windows_core::Result<()> {
-        todo!()
+        debug!("SetPlaybackStatus {value:?}");
+        Ok(())
     }
 
     fn DisplayUpdater(
@@ -32,7 +38,9 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsEnabled(&self, value: bool) -> windows_core::Result<()> {
-        todo!()
+        debug!("SetIsEnabled {value}");
+        // todo!()
+        Ok(())
     }
 
     fn IsPlayEnabled(&self) -> windows_core::Result<bool> {
@@ -40,7 +48,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPlayEnabled(&self, value: bool) -> windows_core::Result<()> {
-        todo!()
+        debug!("SetIsPlayEnabled {value}");
+        Ok(())
     }
 
     fn IsStopEnabled(&self) -> windows_core::Result<bool> {
@@ -56,7 +65,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPauseEnabled(&self, value: bool) -> windows_core::Result<()> {
-        todo!()
+        debug!("SetIsPauseEnabled {value}");
+        Ok(())
     }
 
     fn IsRecordEnabled(&self) -> windows_core::Result<bool> {
@@ -80,7 +90,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsRewindEnabled(&self, value: bool) -> windows_core::Result<()> {
-        todo!()
+        debug!("SetIsRewindEnabled {value}");
+        Ok(())
     }
 
     fn IsPreviousEnabled(&self) -> windows_core::Result<bool> {
@@ -88,7 +99,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPreviousEnabled(&self, value: bool) -> windows_core::Result<()> {
-        todo!()
+        debug!("SetIsPreviousEnabled {value}");
+        Ok(())
     }
 
     fn IsNextEnabled(&self) -> windows_core::Result<bool> {
@@ -96,7 +108,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsNextEnabled(&self, value: bool) -> windows_core::Result<()> {
-        todo!()
+        debug!("SetIsNextEnabled {value}");
+        Ok(())
     }
 
     fn IsChannelUpEnabled(&self) -> windows_core::Result<bool> {
@@ -124,7 +137,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
             >,
         >,
     ) -> windows_core::Result<Foundation::EventRegistrationToken> {
-        todo!()
+        debug!("ButtonPressed");
+        Ok(EventRegistrationToken { Value: 1 })
     }
 
     fn RemoveButtonPressed(
