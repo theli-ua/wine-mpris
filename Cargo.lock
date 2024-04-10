@@ -107,7 +107,7 @@ dependencies = [
  "env_logger",
  "log",
  "windows",
- "windows-core 0.55.0",
+ "windows-core",
  "windows-interface",
 ]
 
@@ -193,7 +193,7 @@ version = "0.54.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9252e5725dbed82865af151df558e754e4a3c2c30818359eb17465f1346a1b49"
 dependencies = [
- "windows-core 0.54.0",
+ "windows-core",
  "windows-implement",
  "windows-interface",
  "windows-targets",
@@ -204,16 +204,6 @@ name = "windows-core"
 version = "0.54.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "12661b9c89351d684a50a8a643ce5f608e20243b9fb84687800163429f161d65"
-dependencies = [
- "windows-result",
- "windows-targets",
-]
-
-[[package]]
-name = "windows-core"
-version = "0.55.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e196554cb2adee641b31198a3bb61fbae729f8f6478098dca8e3af669aac7b20"
 dependencies = [
  "windows-result",
  "windows-targets",

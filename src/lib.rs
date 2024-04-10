@@ -4,7 +4,7 @@ use std::sync::OnceLock;
 use log::{info, warn};
 use windows::{core::*, Win32::Foundation::*, Win32::System::WinRT::*};
 
-// mod bindings;
+mod bindings;
 mod factory;
 mod propsys;
 
@@ -12,7 +12,6 @@ static LOG_INIT: OnceLock<()> = OnceLock::new();
 
 fn init_log() {
     LOG_INIT.get_or_init(|| {
-        eprintln!("LOG IT");
         env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
             .target(env_logger::Target::Stderr)
             .init();

@@ -10,7 +10,7 @@
 use windows::Foundation;
 pub mod Media {
     use windows::Media::*;
-    windows_core::imp::define_interface!(
+    windows_core::imp::com_interface!(
         ISystemMediaTransportControls,
         ISystemMediaTransportControls_Vtbl,
         0x99fa3ff4_1742_42a6_902e_087d41f965ec
