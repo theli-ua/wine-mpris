@@ -24,7 +24,7 @@ impl ISystemMediaTransportControlsInterop_Impl for ActivationFactory {
         info!("GetForWindow hwnd:{appwindow:?}, riid:{:?}", riid);
 
         let result: super::bindings::Media::SystemMediaTransportControls =
-            MediaControls(appwindow).into();
+            MediaControls::new(appwindow).into();
 
         unsafe {
             core::ptr::write(mediatransportcontrol, core::mem::transmute_copy(&result));

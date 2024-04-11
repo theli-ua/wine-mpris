@@ -2,13 +2,32 @@ use log::{debug, info, warn};
 use windows::{
     core::implement,
     Foundation::{self, EventRegistrationToken},
-    Win32::Foundation::HWND,
+    Win32::{
+        Foundation::HWND,
+        UI::WindowsAndMessaging::{
+            GetWindowTextLengthA, GetWindowTextLengthW, GetWindowTextW, GetWindowThreadProcessId,
+        },
+    },
 };
 use windows_core::HRESULT;
 
 use crate::bindings::Media::*;
 #[implement(SystemMediaTransportControls)]
 pub struct MediaControls(pub HWND);
+
+impl MediaControls {
+    pub fn new(appwindow: HWND) -> Self {
+        eprintln!("aaaa");
+        let len = unsafe { GetWindowTextLengthA(appwindow) };
+        eprintln!("len {len}");
+        // let window_text = String::from_utf16_lossy(&text[..len as usize]);
+        // info!(
+        //     "GetForWindow hwnd:{appwindow:?}, riid:{:?}, {window_text}",
+        //     riid
+        // );
+        Self(appwindow)
+    }
+}
 
 impl ISystemMediaTransportControls_Impl for MediaControls {
     fn PlaybackStatus(&self) -> windows_core::Result<windows::Media::MediaPlaybackStatus> {
