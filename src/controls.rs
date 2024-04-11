@@ -1,4 +1,6 @@
-use log::{debug, info, warn};
+use std::sync::Arc;
+
+use mpris_server::Player;
 use windows::{
     core::implement,
     Foundation::{self, EventRegistrationToken},
@@ -13,19 +15,33 @@ use windows_core::HRESULT;
 
 use crate::bindings::Media::*;
 #[implement(SystemMediaTransportControls)]
-pub struct MediaControls(pub HWND);
+pub struct MediaControls {
+    appwindow: HWND,
+    rt_handle: tokio::runtime::Handle,
+    notify: tokio::sync::oneshot::Sender<()>,
+    // player: Arc<Player>,
+}
 
 impl MediaControls {
     pub fn new(appwindow: HWND) -> Self {
-        eprintln!("aaaa");
-        let len = unsafe { GetWindowTextLengthA(appwindow) };
-        eprintln!("len {len}");
-        // let window_text = String::from_utf16_lossy(&text[..len as usize]);
-        // info!(
-        //     "GetForWindow hwnd:{appwindow:?}, riid:{:?}, {window_text}",
-        //     riid
-        // );
-        Self(appwindow)
+        let rt = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap();
+        let (tx, rx) = tokio::sync::oneshot::channel();
+        let handle = rt.handle().clone();
+        std::thread::spawn(move || rt.block_on(rx));
+        // let player = Arc::new(handle
+        //     .block_on(Player::builder("com.wine.mpris").build())
+        //     .unwrap());
+        // let player2 = Arc::clone(&player);
+        // handle.spawn(player.run());
+        Self {
+            appwindow,
+            notify: tx,
+            // player,
+            rt_handle: handle,
+        }
     }
 }
 
@@ -38,7 +54,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         &self,
         value: windows::Media::MediaPlaybackStatus,
     ) -> windows_core::Result<()> {
-        debug!("SetPlaybackStatus {value:?}");
         Ok(())
     }
 
@@ -57,8 +72,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsEnabled(&self, value: bool) -> windows_core::Result<()> {
-        debug!("SetIsEnabled {value}");
-        // todo!()
         Ok(())
     }
 
@@ -67,7 +80,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPlayEnabled(&self, value: bool) -> windows_core::Result<()> {
-        debug!("SetIsPlayEnabled {value}");
         Ok(())
     }
 
@@ -84,7 +96,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPauseEnabled(&self, value: bool) -> windows_core::Result<()> {
-        debug!("SetIsPauseEnabled {value}");
         Ok(())
     }
 
@@ -109,7 +120,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsRewindEnabled(&self, value: bool) -> windows_core::Result<()> {
-        debug!("SetIsRewindEnabled {value}");
         Ok(())
     }
 
@@ -118,7 +128,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPreviousEnabled(&self, value: bool) -> windows_core::Result<()> {
-        debug!("SetIsPreviousEnabled {value}");
         Ok(())
     }
 
@@ -127,7 +136,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsNextEnabled(&self, value: bool) -> windows_core::Result<()> {
-        debug!("SetIsNextEnabled {value}");
         Ok(())
     }
 
@@ -156,7 +164,6 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
             >,
         >,
     ) -> windows_core::Result<Foundation::EventRegistrationToken> {
-        debug!("ButtonPressed");
         Ok(EventRegistrationToken { Value: 1 })
     }
 

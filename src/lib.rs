@@ -7,6 +7,7 @@ use windows::{core::*, Win32::Foundation::*, Win32::System::WinRT::*};
 pub mod bindings;
 pub mod controls;
 mod factory;
+pub mod mpris;
 mod propsys;
 
 static LOG_INIT: OnceLock<()> = OnceLock::new();
@@ -14,7 +15,7 @@ static LOG_INIT: OnceLock<()> = OnceLock::new();
 fn init_log() {
     LOG_INIT.get_or_init(|| {
         env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
-            .target(env_logger::Target::Stderr)
+            .target(env_logger::Target::Stdout)
             .init();
     });
 }
@@ -54,9 +55,9 @@ extern "system" fn DllGetActivationFactory(
 
 #[no_mangle]
 pub extern "system" fn DllGetClassObject(
-    rclsid: *const GUID,
-    riid: *const GUID,
-    result: *mut *mut std::ffi::c_void,
+    _rclsid: *const GUID,
+    _riid: *const GUID,
+    _result: *mut *mut std::ffi::c_void,
 ) -> HRESULT {
     init_log();
     warn!("DllGetClassObject not implemented");
