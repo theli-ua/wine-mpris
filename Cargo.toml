@@ -4,13 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-crate-type = ["staticlib"]
+crate-type = ["cdylib"]
 
 [dependencies]
 env_logger = "0.11.3"
 log = "0.4.21"
-mpris-server = "0.8.0"
-tokio = {version = "1.37.0", features = ["net", "rt", "sync"]}
 windows = {version = "0.54.0", features = [
   "Media",
   "Media_Control",
@@ -23,7 +21,4 @@ windows-core = "0.54.0"
 windows-interface = "0.53.0"
 
 [profile.release]
-lto = "off"
-opt-level = 1
-[profile.dev]
-lto = "off"
+opt-level = "s"

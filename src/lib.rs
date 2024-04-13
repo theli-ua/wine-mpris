@@ -7,7 +7,6 @@ use windows::{core::*, Win32::Foundation::*, Win32::System::WinRT::*};
 pub mod bindings;
 pub mod controls;
 mod factory;
-pub mod mpris;
 mod propsys;
 
 static LOG_INIT: OnceLock<()> = OnceLock::new();

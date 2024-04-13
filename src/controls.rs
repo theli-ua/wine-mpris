@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use mpris_server::Player;
+// use mpris_server::Player;
 use windows::{
     core::implement,
     Foundation::{self, EventRegistrationToken},
@@ -17,20 +17,20 @@ use crate::bindings::Media::*;
 #[implement(SystemMediaTransportControls)]
 pub struct MediaControls {
     appwindow: HWND,
-    rt_handle: tokio::runtime::Handle,
-    notify: tokio::sync::oneshot::Sender<()>,
+    // rt_handle: tokio::runtime::Handle,
+    // notify: tokio::sync::oneshot::Sender<()>,
     // player: Arc<Player>,
 }
 
 impl MediaControls {
     pub fn new(appwindow: HWND) -> Self {
-        let rt = tokio::runtime::Builder::new_current_thread()
-            .enable_all()
-            .build()
-            .unwrap();
-        let (tx, rx) = tokio::sync::oneshot::channel();
-        let handle = rt.handle().clone();
-        std::thread::spawn(move || rt.block_on(rx));
+        // let rt = tokio::runtime::Builder::new_current_thread()
+        //     .enable_all()
+        //     .build()
+        //     .unwrap();
+        // let (tx, rx) = tokio::sync::oneshot::channel();
+        // let handle = rt.handle().clone();
+        // std::thread::spawn(move || rt.block_on(rx));
         // let player = Arc::new(handle
         //     .block_on(Player::builder("com.wine.mpris").build())
         //     .unwrap());
@@ -38,9 +38,9 @@ impl MediaControls {
         // handle.spawn(player.run());
         Self {
             appwindow,
-            notify: tx,
+            // notify: tx,
             // player,
-            rt_handle: handle,
+            // rt_handle: handle,
         }
     }
 }
