@@ -1,4 +1,4 @@
 #/bin/bash
 set -e
-cargo build --release --target i686-unknown-linux-gnu
-winegcc -shared -spec windows.media.mediacontrol.spec target/i686-unknown-linux-gnu/release/libmediacontrol.a -loleaut32 -lpropsys -lcombase -m32 -o windows.media.mediacontrol.so
+cargo build --release --target i686-pc-windows-gnu
+cargo build --release --target x86_64-pc-windows-gnu
