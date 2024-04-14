@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use log::{debug, info};
 // use mpris_server::Player;
 use windows::{
     core::implement,
@@ -17,9 +18,9 @@ use crate::bindings::Media::*;
 #[implement(SystemMediaTransportControls)]
 pub struct MediaControls {
     appwindow: HWND,
-    // rt_handle: tokio::runtime::Handle,
-    // notify: tokio::sync::oneshot::Sender<()>,
-    // player: Arc<Player>,
+    display_updater: SystemMediaTransportControlsDisplayUpdater, // rt_handle: tokio::runtime::Handle,
+                                                                 // notify: tokio::sync::oneshot::Sender<()>,
+                                                                 // player: Arc<Player>,
 }
 
 impl MediaControls {
@@ -36,8 +37,13 @@ impl MediaControls {
         //     .unwrap());
         // let player2 = Arc::clone(&player);
         // handle.spawn(player.run());
+        let display_updater = DisplayUpdater {
+            music: MusicDisplayPropertiesImpl {}.into(),
+        }
+        .into();
         Self {
             appwindow,
+            display_updater,
             // notify: tx,
             // player,
             // rt_handle: handle,
@@ -57,10 +63,8 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         Ok(())
     }
 
-    fn DisplayUpdater(
-        &self,
-    ) -> windows_core::Result<windows::Media::SystemMediaTransportControlsDisplayUpdater> {
-        todo!()
+    fn DisplayUpdater(&self) -> windows_core::Result<SystemMediaTransportControlsDisplayUpdater> {
+        Ok(self.display_updater.clone())
     }
 
     fn SoundLevel(&self) -> windows_core::Result<windows::Media::SoundLevel> {
@@ -191,5 +195,103 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         token: &Foundation::EventRegistrationToken,
     ) -> windows_core::Result<()> {
         todo!()
+    }
+}
+
+#[implement(MusicDisplayProperties)]
+pub struct MusicDisplayPropertiesImpl {}
+
+impl IMusicDisplayProperties_Impl for MusicDisplayPropertiesImpl {
+    fn Title(&self) -> windows_core::Result<windows_core::HSTRING> {
+        todo!()
+    }
+
+    fn SetTitle(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+        debug!("Title: {value:?}");
+        Ok(())
+    }
+
+    fn AlbumArtist(&self) -> windows_core::Result<windows_core::HSTRING> {
+        todo!()
+    }
+
+    fn SetAlbumArtist(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+        debug!("AlbumArtist: {value:?}");
+        Ok(())
+    }
+
+    fn Artist(&self) -> windows_core::Result<windows_core::HSTRING> {
+        todo!()
+    }
+
+    fn SetArtist(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+        debug!("Artist: {value:?}");
+        Ok(())
+    }
+}
+
+#[implement(SystemMediaTransportControlsDisplayUpdater)]
+pub struct DisplayUpdater {
+    music: MusicDisplayProperties,
+}
+
+impl ISystemMediaTransportControlsDisplayUpdater_Impl for DisplayUpdater {
+    fn Type(&self) -> windows_core::Result<windows::Media::MediaPlaybackType> {
+        todo!()
+    }
+
+    fn SetType(&self, value: windows::Media::MediaPlaybackType) -> windows_core::Result<()> {
+        debug!("SetType: {value:?}");
+        Ok(())
+    }
+
+    fn AppMediaId(&self) -> windows_core::Result<windows_core::HSTRING> {
+        todo!()
+    }
+
+    fn SetAppMediaId(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+        todo!()
+    }
+
+    fn Thumbnail(
+        &self,
+    ) -> windows_core::Result<windows::Storage::Streams::RandomAccessStreamReference> {
+        todo!()
+    }
+
+    fn SetThumbnail(
+        &self,
+        value: Option<&windows::Storage::Streams::RandomAccessStreamReference>,
+    ) -> windows_core::Result<()> {
+        todo!()
+    }
+
+    fn MusicProperties(&self) -> windows_core::Result<MusicDisplayProperties> {
+        Ok(self.music.clone())
+    }
+
+    fn VideoProperties(&self) -> windows_core::Result<windows::Media::VideoDisplayProperties> {
+        todo!()
+    }
+
+    fn ImageProperties(&self) -> windows_core::Result<windows::Media::ImageDisplayProperties> {
+        todo!()
+    }
+
+    fn CopyFromFileAsync(
+        &self,
+        r#type: windows::Media::MediaPlaybackType,
+        source: Option<&windows::Storage::StorageFile>,
+    ) -> windows_core::Result<windows::Foundation::IAsyncOperation<bool>> {
+        todo!()
+    }
+
+    fn ClearAll(&self) -> windows_core::Result<()> {
+        todo!()
+    }
+
+    fn Update(&self) -> windows_core::Result<()> {
+        debug!("Update");
+        Ok(())
     }
 }

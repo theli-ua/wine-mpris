@@ -12,10 +12,11 @@ env_logger = "0.11.3"
 log = "0.4.21"
 # libdbus-sys = "0.2.3"
 windows = {version = "0.54.0", features = [
+  "implement",
+  "Foundation_Collections",
   "Media",
   "Media_Control",
   "Storage_Streams",
-  "implement",
   "Win32_Foundation",
   "Win32_System_WinRT",
   "Win32_UI_WindowsAndMessaging"

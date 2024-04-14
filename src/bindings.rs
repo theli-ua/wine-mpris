@@ -1286,4 +1286,820 @@ pub mod Media {
             iid == &<ISystemMediaTransportControls as windows_core::Interface>::IID
         }
     }
+    windows_core::imp::com_interface!(
+        ISystemMediaTransportControlsDisplayUpdater,
+        ISystemMediaTransportControlsDisplayUpdater_Vtbl,
+        0x8abbc53e_fa55_4ecf_ad8e_c984e5dd1550
+    );
+    #[repr(C)]
+    pub struct ISystemMediaTransportControlsDisplayUpdater_Vtbl {
+        pub base__: windows_core::IInspectable_Vtbl,
+        pub Type: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut MediaPlaybackType,
+        ) -> windows_core::HRESULT,
+        pub SetType: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            MediaPlaybackType,
+        ) -> windows_core::HRESULT,
+        pub AppMediaId: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub SetAppMediaId: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub Thumbnail: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut *mut core::ffi::c_void,
+        ) -> windows_core::HRESULT,
+        pub SetThumbnail: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut core::ffi::c_void,
+        ) -> windows_core::HRESULT,
+        pub MusicProperties: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut *mut core::ffi::c_void,
+        ) -> windows_core::HRESULT,
+        pub VideoProperties: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut *mut core::ffi::c_void,
+        ) -> windows_core::HRESULT,
+        pub ImageProperties: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut *mut core::ffi::c_void,
+        ) -> windows_core::HRESULT,
+        pub CopyFromFileAsync: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            MediaPlaybackType,
+            *mut core::ffi::c_void,
+            *mut *mut core::ffi::c_void,
+        ) -> windows_core::HRESULT,
+        pub ClearAll: unsafe extern "system" fn(*mut core::ffi::c_void) -> windows_core::HRESULT,
+        pub Update: unsafe extern "system" fn(*mut core::ffi::c_void) -> windows_core::HRESULT,
+    }
+    #[repr(transparent)]
+    #[derive(PartialEq, Eq, core::fmt::Debug, Clone)]
+    pub struct SystemMediaTransportControlsDisplayUpdater(windows_core::IUnknown);
+    windows_core::imp::interface_hierarchy!(
+        SystemMediaTransportControlsDisplayUpdater,
+        windows_core::IUnknown,
+        windows_core::IInspectable
+    );
+    impl SystemMediaTransportControlsDisplayUpdater {
+        pub fn Type(&self) -> windows_core::Result<MediaPlaybackType> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).Type)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .map(|| result__)
+            }
+        }
+        pub fn SetType(&self, value: MediaPlaybackType) -> windows_core::Result<()> {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetType)(
+                    windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+            }
+        }
+        pub fn AppMediaId(&self) -> windows_core::Result<windows_core::HSTRING> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).AppMediaId)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn SetAppMediaId(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetAppMediaId)(
+                    windows_core::Interface::as_raw(this),
+                    core::mem::transmute_copy(value),
+                )
+                .ok()
+            }
+        }
+        pub fn Thumbnail(
+            &self,
+        ) -> windows_core::Result<windows::Storage::Streams::RandomAccessStreamReference> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).Thumbnail)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn SetThumbnail<P0>(&self, value: P0) -> windows_core::Result<()>
+        where
+            P0: windows_core::IntoParam<windows::Storage::Streams::RandomAccessStreamReference>,
+        {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetThumbnail)(
+                    windows_core::Interface::as_raw(this),
+                    value.into_param().abi(),
+                )
+                .ok()
+            }
+        }
+        pub fn MusicProperties(&self) -> windows_core::Result<MusicDisplayProperties> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).MusicProperties)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn VideoProperties(&self) -> windows_core::Result<VideoDisplayProperties> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).VideoProperties)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn ImageProperties(&self) -> windows_core::Result<ImageDisplayProperties> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).ImageProperties)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn CopyFromFileAsync<P0>(
+            &self,
+            r#type: MediaPlaybackType,
+            source: P0,
+        ) -> windows_core::Result<super::Foundation::IAsyncOperation<bool>>
+        where
+            P0: windows_core::IntoParam<windows::Storage::StorageFile>,
+        {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).CopyFromFileAsync)(
+                    windows_core::Interface::as_raw(this),
+                    r#type,
+                    source.into_param().abi(),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn ClearAll(&self) -> windows_core::Result<()> {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).ClearAll)(windows_core::Interface::as_raw(
+                    this,
+                ))
+                .ok()
+            }
+        }
+        pub fn Update(&self) -> windows_core::Result<()> {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).Update)(windows_core::Interface::as_raw(
+                    this,
+                ))
+                .ok()
+            }
+        }
+    }
+    impl windows_core::RuntimeType for SystemMediaTransportControlsDisplayUpdater {
+        const SIGNATURE: windows_core::imp::ConstBuffer =
+            windows_core::imp::ConstBuffer::for_class::<Self>();
+    }
+    unsafe impl windows_core::Interface for SystemMediaTransportControlsDisplayUpdater {
+        type Vtable = ISystemMediaTransportControlsDisplayUpdater_Vtbl;
+        const IID: windows_core::GUID =
+            <ISystemMediaTransportControlsDisplayUpdater as windows_core::Interface>::IID;
+    }
+    impl windows_core::RuntimeName for SystemMediaTransportControlsDisplayUpdater {
+        const NAME: &'static str = "Windows.Media.SystemMediaTransportControlsDisplayUpdater";
+    }
+    unsafe impl Send for SystemMediaTransportControlsDisplayUpdater {}
+    unsafe impl Sync for SystemMediaTransportControlsDisplayUpdater {}
+    pub trait ISystemMediaTransportControlsDisplayUpdater_Impl: Sized {
+        fn Type(&self) -> windows_core::Result<MediaPlaybackType>;
+        fn SetType(&self, value: MediaPlaybackType) -> windows_core::Result<()>;
+        fn AppMediaId(&self) -> windows_core::Result<windows_core::HSTRING>;
+        fn SetAppMediaId(&self, value: &windows_core::HSTRING) -> windows_core::Result<()>;
+        fn Thumbnail(
+            &self,
+        ) -> windows_core::Result<windows::Storage::Streams::RandomAccessStreamReference>;
+        fn SetThumbnail(
+            &self,
+            value: Option<&windows::Storage::Streams::RandomAccessStreamReference>,
+        ) -> windows_core::Result<()>;
+        fn MusicProperties(&self) -> windows_core::Result<MusicDisplayProperties>;
+        fn VideoProperties(&self) -> windows_core::Result<VideoDisplayProperties>;
+        fn ImageProperties(&self) -> windows_core::Result<ImageDisplayProperties>;
+        fn CopyFromFileAsync(
+            &self,
+            r#type: MediaPlaybackType,
+            source: Option<&windows::Storage::StorageFile>,
+        ) -> windows_core::Result<super::Foundation::IAsyncOperation<bool>>;
+        fn ClearAll(&self) -> windows_core::Result<()>;
+        fn Update(&self) -> windows_core::Result<()>;
+    }
+    impl windows_core::RuntimeName for ISystemMediaTransportControlsDisplayUpdater {
+        const NAME: &'static str = "Windows.Media.ISystemMediaTransportControlsDisplayUpdater";
+    }
+    impl ISystemMediaTransportControlsDisplayUpdater_Vtbl {
+        pub const fn new<
+            Identity: windows_core::IUnknownImpl<Impl = Impl>,
+            Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+            const OFFSET: isize,
+        >() -> ISystemMediaTransportControlsDisplayUpdater_Vtbl {
+            unsafe extern "system" fn Type<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut MediaPlaybackType,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.Type() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn SetType<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                value: MediaPlaybackType,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.SetType(value).into()
+            }
+            unsafe extern "system" fn AppMediaId<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.AppMediaId() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn SetAppMediaId<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                value: std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.SetAppMediaId(core::mem::transmute(&value)).into()
+            }
+            unsafe extern "system" fn Thumbnail<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.Thumbnail() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn SetThumbnail<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                value: *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.SetThumbnail(windows_core::from_raw_borrowed(&value))
+                    .into()
+            }
+            unsafe extern "system" fn MusicProperties<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.MusicProperties() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn VideoProperties<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.VideoProperties() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn ImageProperties<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.ImageProperties() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn CopyFromFileAsync<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                r#type: MediaPlaybackType,
+                source: *mut core::ffi::c_void,
+                result__: *mut *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.CopyFromFileAsync(r#type, windows_core::from_raw_borrowed(&source)) {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn ClearAll<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.ClearAll().into()
+            }
+            unsafe extern "system" fn Update<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsDisplayUpdater_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.Update().into()
+            }
+            Self {
+                base__: windows_core::IInspectable_Vtbl::new::<
+                    Identity,
+                    ISystemMediaTransportControlsDisplayUpdater,
+                    OFFSET,
+                >(),
+                Type: Type::<Identity, Impl, OFFSET>,
+                SetType: SetType::<Identity, Impl, OFFSET>,
+                AppMediaId: AppMediaId::<Identity, Impl, OFFSET>,
+                SetAppMediaId: SetAppMediaId::<Identity, Impl, OFFSET>,
+                Thumbnail: Thumbnail::<Identity, Impl, OFFSET>,
+                SetThumbnail: SetThumbnail::<Identity, Impl, OFFSET>,
+                MusicProperties: MusicProperties::<Identity, Impl, OFFSET>,
+                VideoProperties: VideoProperties::<Identity, Impl, OFFSET>,
+                ImageProperties: ImageProperties::<Identity, Impl, OFFSET>,
+                CopyFromFileAsync: CopyFromFileAsync::<Identity, Impl, OFFSET>,
+                ClearAll: ClearAll::<Identity, Impl, OFFSET>,
+                Update: Update::<Identity, Impl, OFFSET>,
+            }
+        }
+        pub fn matches(iid: &windows_core::GUID) -> bool {
+            iid == &<ISystemMediaTransportControlsDisplayUpdater as windows_core::Interface>::IID
+        }
+    }
+
+    windows_core::imp::com_interface!(
+        IMusicDisplayProperties,
+        IMusicDisplayProperties_Vtbl,
+        0x6bbf0c59_d0a0_4d26_92a0_f978e1d18e7b
+    );
+    #[repr(C)]
+    pub struct IMusicDisplayProperties_Vtbl {
+        pub base__: windows_core::IInspectable_Vtbl,
+        pub Title: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub SetTitle: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub AlbumArtist: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub SetAlbumArtist: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub Artist: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub SetArtist: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+    }
+    #[repr(transparent)]
+    #[derive(PartialEq, Eq, core::fmt::Debug, Clone)]
+    pub struct MusicDisplayProperties(windows_core::IUnknown);
+    windows_core::imp::interface_hierarchy!(
+        MusicDisplayProperties,
+        windows_core::IUnknown,
+        windows_core::IInspectable
+    );
+    impl MusicDisplayProperties {
+        pub fn Title(&self) -> windows_core::Result<windows_core::HSTRING> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).Title)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn SetTitle(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetTitle)(
+                    windows_core::Interface::as_raw(this),
+                    core::mem::transmute_copy(value),
+                )
+                .ok()
+            }
+        }
+        pub fn AlbumArtist(&self) -> windows_core::Result<windows_core::HSTRING> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).AlbumArtist)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn SetAlbumArtist(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetAlbumArtist)(
+                    windows_core::Interface::as_raw(this),
+                    core::mem::transmute_copy(value),
+                )
+                .ok()
+            }
+        }
+        pub fn Artist(&self) -> windows_core::Result<windows_core::HSTRING> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).Artist)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn SetArtist(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+            let this = self;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetArtist)(
+                    windows_core::Interface::as_raw(this),
+                    core::mem::transmute_copy(value),
+                )
+                .ok()
+            }
+        }
+        pub fn AlbumTitle(&self) -> windows_core::Result<windows_core::HSTRING> {
+            let this = &windows_core::Interface::cast::<IMusicDisplayProperties2>(self)?;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).AlbumTitle)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn SetAlbumTitle(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+            let this = &windows_core::Interface::cast::<IMusicDisplayProperties2>(self)?;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetAlbumTitle)(
+                    windows_core::Interface::as_raw(this),
+                    core::mem::transmute_copy(value),
+                )
+                .ok()
+            }
+        }
+        pub fn TrackNumber(&self) -> windows_core::Result<u32> {
+            let this = &windows_core::Interface::cast::<IMusicDisplayProperties2>(self)?;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).TrackNumber)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .map(|| result__)
+            }
+        }
+        pub fn SetTrackNumber(&self, value: u32) -> windows_core::Result<()> {
+            let this = &windows_core::Interface::cast::<IMusicDisplayProperties2>(self)?;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetTrackNumber)(
+                    windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+            }
+        }
+        pub fn Genres(
+            &self,
+        ) -> windows_core::Result<super::Foundation::Collections::IVector<windows_core::HSTRING>>
+        {
+            let this = &windows_core::Interface::cast::<IMusicDisplayProperties2>(self)?;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).Genres)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .and_then(|| windows_core::Type::from_abi(result__))
+            }
+        }
+        pub fn AlbumTrackCount(&self) -> windows_core::Result<u32> {
+            let this = &windows_core::Interface::cast::<IMusicDisplayProperties3>(self)?;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).AlbumTrackCount)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .map(|| result__)
+            }
+        }
+        pub fn SetAlbumTrackCount(&self, value: u32) -> windows_core::Result<()> {
+            let this = &windows_core::Interface::cast::<IMusicDisplayProperties3>(self)?;
+            unsafe {
+                (windows_core::Interface::vtable(this).SetAlbumTrackCount)(
+                    windows_core::Interface::as_raw(this),
+                    value,
+                )
+                .ok()
+            }
+        }
+    }
+    impl windows_core::RuntimeType for MusicDisplayProperties {
+        const SIGNATURE: windows_core::imp::ConstBuffer =
+            windows_core::imp::ConstBuffer::for_class::<Self>();
+    }
+    unsafe impl windows_core::Interface for MusicDisplayProperties {
+        type Vtable = IMusicDisplayProperties_Vtbl;
+        const IID: windows_core::GUID = <IMusicDisplayProperties as windows_core::Interface>::IID;
+    }
+    impl windows_core::RuntimeName for MusicDisplayProperties {
+        const NAME: &'static str = "Windows.Media.MusicDisplayProperties";
+    }
+    unsafe impl Send for MusicDisplayProperties {}
+    unsafe impl Sync for MusicDisplayProperties {}
+    pub trait IMusicDisplayProperties_Impl: Sized {
+        fn Title(&self) -> windows_core::Result<windows_core::HSTRING>;
+        fn SetTitle(&self, value: &windows_core::HSTRING) -> windows_core::Result<()>;
+        fn AlbumArtist(&self) -> windows_core::Result<windows_core::HSTRING>;
+        fn SetAlbumArtist(&self, value: &windows_core::HSTRING) -> windows_core::Result<()>;
+        fn Artist(&self) -> windows_core::Result<windows_core::HSTRING>;
+        fn SetArtist(&self, value: &windows_core::HSTRING) -> windows_core::Result<()>;
+    }
+    impl windows_core::RuntimeName for IMusicDisplayProperties {
+        const NAME: &'static str = "Windows.Media.IMusicDisplayProperties";
+    }
+    impl IMusicDisplayProperties_Vtbl {
+        pub const fn new<
+            Identity: windows_core::IUnknownImpl<Impl = Impl>,
+            Impl: IMusicDisplayProperties_Impl,
+            const OFFSET: isize,
+        >() -> IMusicDisplayProperties_Vtbl {
+            unsafe extern "system" fn Title<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: IMusicDisplayProperties_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.Title() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn SetTitle<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: IMusicDisplayProperties_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                value: std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.SetTitle(core::mem::transmute(&value)).into()
+            }
+            unsafe extern "system" fn AlbumArtist<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: IMusicDisplayProperties_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.AlbumArtist() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn SetAlbumArtist<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: IMusicDisplayProperties_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                value: std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.SetAlbumArtist(core::mem::transmute(&value)).into()
+            }
+            unsafe extern "system" fn Artist<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: IMusicDisplayProperties_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.Artist() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        core::mem::forget(ok__);
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            unsafe extern "system" fn SetArtist<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: IMusicDisplayProperties_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                value: std::mem::MaybeUninit<windows_core::HSTRING>,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                this.SetArtist(core::mem::transmute(&value)).into()
+            }
+            Self {
+                base__: windows_core::IInspectable_Vtbl::new::<
+                    Identity,
+                    IMusicDisplayProperties,
+                    OFFSET,
+                >(),
+                Title: Title::<Identity, Impl, OFFSET>,
+                SetTitle: SetTitle::<Identity, Impl, OFFSET>,
+                AlbumArtist: AlbumArtist::<Identity, Impl, OFFSET>,
+                SetAlbumArtist: SetAlbumArtist::<Identity, Impl, OFFSET>,
+                Artist: Artist::<Identity, Impl, OFFSET>,
+                SetArtist: SetArtist::<Identity, Impl, OFFSET>,
+            }
+        }
+        pub fn matches(iid: &windows_core::GUID) -> bool {
+            iid == &<IMusicDisplayProperties as windows_core::Interface>::IID
+        }
+    }
+
+    windows_core::imp::com_interface!(
+        IMusicDisplayProperties2,
+        IMusicDisplayProperties2_Vtbl,
+        0x00368462_97d3_44b9_b00f_008afcefaf18
+    );
+    #[repr(C)]
+    pub struct IMusicDisplayProperties2_Vtbl {
+        pub base__: windows_core::IInspectable_Vtbl,
+        pub AlbumTitle: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub SetAlbumTitle: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            std::mem::MaybeUninit<windows_core::HSTRING>,
+        ) -> windows_core::HRESULT,
+        pub TrackNumber:
+            unsafe extern "system" fn(*mut core::ffi::c_void, *mut u32) -> windows_core::HRESULT,
+        pub SetTrackNumber:
+            unsafe extern "system" fn(*mut core::ffi::c_void, u32) -> windows_core::HRESULT,
+        pub Genres: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut *mut core::ffi::c_void,
+        ) -> windows_core::HRESULT,
+    }
 }
