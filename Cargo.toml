@@ -18,12 +18,15 @@ windows = {version = "0.54.0", features = [
   "Media_Control",
   "Storage_Streams",
   "Win32_Foundation",
+  "Win32_System_Threading",
   "Win32_System_WinRT",
-  "Win32_UI_WindowsAndMessaging"
+  "Win32_System_LibraryLoader",
+  "Win32_System_SystemServices", # IMAGE_DOS_HEADER
+  "Win32_UI_WindowsAndMessaging",
+  "Wdk_Storage_FileSystem",# NtQueryVirtualMemory
 ]}
 windows-core = "0.54.0"
 windows-interface = "0.53.0"
-wine-macro = "*"
 
 [profile.release]
 opt-level = "s"
