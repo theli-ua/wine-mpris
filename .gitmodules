@@ -1,0 +1,3 @@
+[submodule "zbus"]
+	path = zbus
+	url = https://github.com/theli-ua/zbus
