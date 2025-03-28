@@ -60,6 +60,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         &self,
         value: windows::Media::MediaPlaybackStatus,
     ) -> windows_core::Result<()> {
+        debug!("{value:?}");
         Ok(())
     }
 
