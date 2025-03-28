@@ -7,7 +7,6 @@ use windows::{core::*, Win32::Foundation::*, Win32::System::WinRT::*};
 pub mod bindings;
 pub mod controls;
 mod factory;
-mod propsys;
 
 static LOG_INIT: OnceLock<()> = OnceLock::new();
 
@@ -43,7 +42,10 @@ extern "system" fn DllGetActivationFactory(
     // `IActivationFactory` pointer and that's what `factory` contains.
     unsafe {
         if let Some(factory) = factory {
-            *result = std::mem::transmute(factory);
+            *result = std::mem::transmute::<
+                windows::Win32::System::WinRT::IActivationFactory,
+                *mut std::ffi::c_void,
+            >(factory);
             S_OK
         } else {
             *result = std::ptr::null_mut();
