@@ -28,9 +28,10 @@ windows = {version = "0.54.0", features = [
 windows-core = "0.54.0"
 windows-interface = "0.53.0"
 wine-macro = "*"
-zbus = { version = "*", default-features = false, features = ["async-io", "tokio", "wine"] }
+zbus = { version = "*", default-features = false, features = ["async-io", "wine"] }
 [patch.crates-io]
 zbus = { path = "zbus/zbus" }
+mpris-server = { git = "https://github.com/SeaDve/mpris-server.git", rev = "d840761a4405fa344f5b46f1065f2d450af049f9" }
 
 [profile.release]
 opt-level = "s"
