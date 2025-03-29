@@ -2,7 +2,10 @@ use std::sync::OnceLock;
 
 use log::info;
 use mpris_server::Player;
-use tokio::sync::mpsc::{self, UnboundedReceiver};
+use tokio::{
+    sync::mpsc::{self, UnboundedReceiver},
+    task::LocalSet,
+};
 
 static TX: OnceLock<mpsc::UnboundedSender<Command>> = OnceLock::new();
 
@@ -12,6 +15,10 @@ pub enum Command {
 
 pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
     info!("Spawning bg async task");
+    info!(
+        "rt flavor {:?}",
+        tokio::runtime::Handle::current().runtime_flavor()
+    );
     while let Some(m) = rx.recv().await {
         match m {
             Command::SpawnPlayer => {
@@ -39,7 +46,15 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
                 player.connect_next(|_player| {
                     info!("Next");
                 });
-                player.run().await;
+                player
+                    .set_playback_status(mpris_server::PlaybackStatus::Playing)
+                    .await
+                    .unwrap();
+                // player.run().await;
+                tokio::task::spawn_local(async move {
+                    player.run().await;
+                    info!("DDDDONE");
+                });
             }
         }
     }
@@ -48,11 +63,14 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
 fn get_tx() -> &'static mpsc::UnboundedSender<Command> {
     TX.get_or_init(|| {
         let (tx, rx) = mpsc::unbounded_channel();
-        let rt = tokio::runtime::Builder::new_current_thread()
-            .enable_io()
-            .build()
-            .unwrap();
-        std::thread::spawn(move || rt.block_on(crate::mpris::mpris_local_task(rx)));
+        std::thread::spawn(move || {
+            let rt = tokio::runtime::Builder::new_current_thread()
+                .enable_io()
+                .build()
+                .unwrap();
+            rt.block_on(LocalSet::new().run_until(crate::mpris::mpris_local_task(rx)));
+            panic!("TERMINATOR");
+        });
         tx
     })
 }

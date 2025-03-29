@@ -21,6 +21,12 @@ fn init_log() {
     });
 }
 
+struct SyncFactory(IActivationFactory);
+unsafe impl Send for SyncFactory {}
+unsafe impl Sync for SyncFactory {}
+
+static FACTORY: OnceLock<SyncFactory> = OnceLock::new();
+
 #[no_mangle]
 extern "system" fn DllGetActivationFactory(
     name: std::mem::ManuallyDrop<HSTRING>,
@@ -35,7 +41,12 @@ extern "system" fn DllGetActivationFactory(
 
     if *name == "Windows.Media.SystemMediaTransportControls" {
         info!("Returning factory SystemMediaTransportControls");
-        factory = Some(factory::ActivationFactory.into());
+        factory = Some(
+            FACTORY
+                .get_or_init(|| SyncFactory(factory::ActivationFactory::default().into()))
+                .0
+                .clone(),
+        );
     } else {
         warn!("No factory for {}", *name);
     }
