@@ -4,18 +4,20 @@ use std::sync::OnceLock;
 use log::{info, warn};
 use windows::{core::*, Win32::Foundation::*, Win32::System::WinRT::*};
 
-pub mod r#async;
 pub mod bindings;
 pub mod controls;
 mod factory;
+pub mod mpris;
 
 static LOG_INIT: OnceLock<()> = OnceLock::new();
 
 fn init_log() {
     LOG_INIT.get_or_init(|| {
-        env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
-            .target(env_logger::Target::Stdout)
-            .init();
+        tracing_subscriber::fmt::init();
+        // tracing_log::LogTracer::init().unwrap();
+        // env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
+        //     .target(env_logger::Target::Stdout)
+        //     .init();
     });
 }
 

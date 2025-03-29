@@ -1,6 +1,8 @@
 use std::sync::Arc;
 
 use log::{debug, info};
+use mpris_server::Player;
+use tokio::task::LocalSet;
 // use mpris_server::Player;
 use windows::{
     core::implement,
@@ -25,18 +27,8 @@ pub struct MediaControls {
 
 impl MediaControls {
     pub fn new(appwindow: HWND) -> Self {
-        // let rt = tokio::runtime::Builder::new_current_thread()
-        //     .enable_all()
-        //     .build()
-        //     .unwrap();
-        // let (tx, rx) = tokio::sync::oneshot::channel();
-        // let handle = rt.handle().clone();
-        // std::thread::spawn(move || rt.block_on(rx));
-        // let player = Arc::new(handle
-        //     .block_on(Player::builder("com.wine.mpris").build())
-        //     .unwrap());
-        // let player2 = Arc::clone(&player);
-        // handle.spawn(player.run());
+        crate::mpris::spawn_player();
+
         let display_updater = DisplayUpdater {
             music: MusicDisplayPropertiesImpl {}.into(),
         }
