@@ -1,4 +1,4 @@
-use std::sync::OnceLock;
+use std::{mem, sync::OnceLock};
 
 use log::info;
 use mpris_server::Player;
@@ -6,11 +6,12 @@ use tokio::{
     sync::mpsc::{self, UnboundedReceiver},
     task::LocalSet,
 };
+use windows::Win32::{Foundation::HWND, UI::WindowsAndMessaging::GetWindowTextW};
 
 static TX: OnceLock<mpsc::UnboundedSender<Command>> = OnceLock::new();
 
 pub enum Command {
-    SpawnPlayer,
+    SpawnPlayer(HWND),
 }
 
 pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
@@ -21,9 +22,15 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
     );
     while let Some(m) = rx.recv().await {
         match m {
-            Command::SpawnPlayer => {
+            Command::SpawnPlayer(hwnd) => {
+                let window_title = unsafe {
+                    let mut v: [u16; 255] = mem::uninitialized();
+                    let read_len = GetWindowTextW(hwnd, &mut v[..]);
+                    String::from_utf16_lossy(&v[0..read_len as usize])
+                };
+                let window_title = window_title.replace(' ', ".");
                 info!("Spawning player");
-                let player = Player::builder("Test.Application")
+                let player = Player::builder(&window_title)
                     .can_play(true)
                     .can_pause(true)
                     .can_go_previous(true)
@@ -75,6 +82,6 @@ fn get_tx() -> &'static mpsc::UnboundedSender<Command> {
     })
 }
 
-pub fn spawn_player() {
-    get_tx().send(Command::SpawnPlayer).unwrap();
+pub fn spawn_player(hwnd: HWND) {
+    get_tx().send(Command::SpawnPlayer(hwnd)).unwrap();
 }

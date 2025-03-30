@@ -27,7 +27,7 @@ pub struct MediaControls {
 
 impl MediaControls {
     pub fn new(appwindow: HWND) -> Self {
-        crate::mpris::spawn_player();
+        crate::mpris::spawn_player(appwindow);
 
         let display_updater = DisplayUpdater {
             music: MusicDisplayPropertiesImpl {}.into(),
