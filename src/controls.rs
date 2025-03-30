@@ -16,7 +16,7 @@ use windows::{
 };
 use windows_core::HRESULT;
 
-use crate::bindings::Media::*;
+use crate::{bindings::Media::*, mpris::send_command};
 #[implement(SystemMediaTransportControls)]
 pub struct MediaControls {
     appwindow: HWND,
@@ -30,7 +30,7 @@ impl MediaControls {
         crate::mpris::spawn_player(appwindow);
 
         let display_updater = DisplayUpdater {
-            music: MusicDisplayPropertiesImpl {}.into(),
+            music: MusicDisplayPropertiesImpl { hwnd: appwindow }.into(),
         }
         .into();
         Self {
@@ -52,6 +52,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         &self,
         value: windows::Media::MediaPlaybackStatus,
     ) -> windows_core::Result<()> {
+        send_command(crate::mpris::Command::SetState(self.appwindow, value));
         debug!("{value:?}");
         Ok(())
     }
@@ -192,7 +193,9 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
 }
 
 #[implement(MusicDisplayProperties)]
-pub struct MusicDisplayPropertiesImpl {}
+pub struct MusicDisplayPropertiesImpl {
+    hwnd: HWND,
+}
 
 impl IMusicDisplayProperties_Impl for MusicDisplayPropertiesImpl {
     fn Title(&self) -> windows_core::Result<windows_core::HSTRING> {
@@ -201,6 +204,10 @@ impl IMusicDisplayProperties_Impl for MusicDisplayPropertiesImpl {
 
     fn SetTitle(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
         debug!("Title: {value:?}");
+        send_command(crate::mpris::Command::SetTitle(
+            self.hwnd,
+            value.to_string(),
+        ));
         Ok(())
     }
 
@@ -218,7 +225,11 @@ impl IMusicDisplayProperties_Impl for MusicDisplayPropertiesImpl {
     }
 
     fn SetArtist(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
-        debug!("Artist: {value:?}");
+        debug!("Artist: {value:?} {value} {}", value.len());
+        send_command(crate::mpris::Command::SetArtist(
+            self.hwnd,
+            value.to_string(),
+        ));
         Ok(())
     }
 }

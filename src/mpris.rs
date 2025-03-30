@@ -1,4 +1,4 @@
-use std::{mem, sync::OnceLock};
+use std::{collections::HashMap, mem, rc::Rc, sync::OnceLock};
 
 use log::info;
 use mpris_server::Player;
@@ -6,20 +6,22 @@ use tokio::{
     sync::mpsc::{self, UnboundedReceiver},
     task::LocalSet,
 };
-use windows::Win32::{Foundation::HWND, UI::WindowsAndMessaging::GetWindowTextW};
+use windows::{
+    Media::MediaPlaybackStatus,
+    Win32::{Foundation::HWND, UI::WindowsAndMessaging::GetWindowTextW},
+};
 
 static TX: OnceLock<mpsc::UnboundedSender<Command>> = OnceLock::new();
 
 pub enum Command {
     SpawnPlayer(HWND),
+    SetTitle(HWND, String),
+    SetArtist(HWND, String),
+    SetState(HWND, windows::Media::MediaPlaybackStatus),
 }
 
 pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
-    info!("Spawning bg async task");
-    info!(
-        "rt flavor {:?}",
-        tokio::runtime::Handle::current().runtime_flavor()
-    );
+    let mut players = HashMap::new();
     while let Some(m) = rx.recv().await {
         match m {
             Command::SpawnPlayer(hwnd) => {
@@ -53,15 +55,36 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
                 player.connect_next(|_player| {
                     info!("Next");
                 });
-                player
-                    .set_playback_status(mpris_server::PlaybackStatus::Playing)
-                    .await
-                    .unwrap();
+                let player = Rc::new(player);
+                players.insert(hwnd.0, player.clone());
                 // player.run().await;
                 tokio::task::spawn_local(async move {
                     player.run().await;
-                    info!("DDDDONE");
                 });
+            }
+            Command::SetTitle(hwnd, title) => {
+                let player = players.get_mut(&hwnd.0).unwrap();
+                let mut md = player.metadata().clone();
+                md.set_title(Some(title));
+                player.set_metadata(md).await.unwrap();
+            }
+            Command::SetArtist(hwnd, artist) => {
+                let player = players.get_mut(&hwnd.0).unwrap();
+                let mut md = player.metadata().clone();
+                md.set_artist(Some(std::iter::once(artist)));
+                player.set_metadata(md).await.unwrap();
+            }
+            Command::SetState(hwnd, media_playback_status) => {
+                let player = players.get_mut(&hwnd.0).unwrap();
+                let playback_status = match media_playback_status {
+                    MediaPlaybackStatus::Playing => mpris_server::PlaybackStatus::Playing,
+                    MediaPlaybackStatus::Stopped => mpris_server::PlaybackStatus::Stopped,
+                    MediaPlaybackStatus::Paused => mpris_server::PlaybackStatus::Paused,
+                    _ => {
+                        continue;
+                    }
+                };
+                player.set_playback_status(playback_status).await.unwrap();
             }
         }
     }
@@ -84,4 +107,8 @@ fn get_tx() -> &'static mpsc::UnboundedSender<Command> {
 
 pub fn spawn_player(hwnd: HWND) {
     get_tx().send(Command::SpawnPlayer(hwnd)).unwrap();
+}
+
+pub fn send_command(cmd: Command) {
+    get_tx().send(cmd).unwrap();
 }
