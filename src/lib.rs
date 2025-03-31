@@ -1,4 +1,5 @@
 #![allow(non_snake_case)]
+#![allow(non_camel_case_types)]
 use std::sync::OnceLock;
 
 use log::{info, warn};
@@ -14,10 +15,6 @@ static LOG_INIT: OnceLock<()> = OnceLock::new();
 fn init_log() {
     LOG_INIT.get_or_init(|| {
         tracing_subscriber::fmt::init();
-        // tracing_log::LogTracer::init().unwrap();
-        // env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info"))
-        //     .target(env_logger::Target::Stdout)
-        //     .init();
     });
 }
 

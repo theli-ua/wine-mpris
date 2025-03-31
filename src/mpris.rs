@@ -1,4 +1,4 @@
-use std::{collections::HashMap, mem, rc::Rc, sync::OnceLock};
+use std::{collections::HashMap, mem::MaybeUninit, rc::Rc, sync::OnceLock};
 
 use log::info;
 use mpris_server::Player;
@@ -26,7 +26,10 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
         match m {
             Command::SpawnPlayer(hwnd) => {
                 let window_title = unsafe {
-                    let mut v: [u16; 255] = mem::uninitialized();
+                    let mut v: [u16; 255] = {
+                        let val = MaybeUninit::uninit();
+                        val.assume_init()
+                    };
                     let read_len = GetWindowTextW(hwnd, &mut v[..]);
                     String::from_utf16_lossy(&v[0..read_len as usize])
                 };
@@ -99,7 +102,6 @@ fn get_tx() -> &'static mpsc::UnboundedSender<Command> {
                 .build()
                 .unwrap();
             rt.block_on(LocalSet::new().run_until(crate::mpris::mpris_local_task(rx)));
-            panic!("TERMINATOR");
         });
         tx
     })

@@ -1,28 +1,16 @@
-use std::sync::Arc;
-
-use log::{debug, info};
-use mpris_server::Player;
-use tokio::task::LocalSet;
+use log::debug;
 // use mpris_server::Player;
 use windows::{
     core::implement,
     Foundation::{self, EventRegistrationToken},
-    Win32::{
-        Foundation::HWND,
-        UI::WindowsAndMessaging::{
-            GetWindowTextLengthA, GetWindowTextLengthW, GetWindowTextW, GetWindowThreadProcessId,
-        },
-    },
+    Win32::Foundation::HWND,
 };
-use windows_core::HRESULT;
 
 use crate::{bindings::Media::*, mpris::send_command};
 #[implement(SystemMediaTransportControls)]
 pub struct MediaControls {
     appwindow: HWND,
-    display_updater: SystemMediaTransportControlsDisplayUpdater, // rt_handle: tokio::runtime::Handle,
-                                                                 // notify: tokio::sync::oneshot::Sender<()>,
-                                                                 // player: Arc<Player>,
+    display_updater: SystemMediaTransportControlsDisplayUpdater,
 }
 
 impl MediaControls {
@@ -36,9 +24,6 @@ impl MediaControls {
         Self {
             appwindow,
             display_updater,
-            // notify: tx,
-            // player,
-            // rt_handle: handle,
         }
     }
 }
@@ -70,6 +55,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         Ok(())
     }
 
@@ -78,6 +64,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPlayEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         Ok(())
     }
 
@@ -86,6 +73,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsStopEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         todo!()
     }
 
@@ -94,6 +82,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPauseEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         Ok(())
     }
 
@@ -102,6 +91,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsRecordEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         todo!()
     }
 
@@ -110,6 +100,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsFastForwardEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         todo!()
     }
 
@@ -118,6 +109,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsRewindEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         Ok(())
     }
 
@@ -126,6 +118,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsPreviousEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         Ok(())
     }
 
@@ -134,6 +127,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsNextEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         Ok(())
     }
 
@@ -142,6 +136,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsChannelUpEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         todo!()
     }
 
@@ -150,6 +145,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
     }
 
     fn SetIsChannelDownEnabled(&self, value: bool) -> windows_core::Result<()> {
+        let _ = value;
         todo!()
     }
 
@@ -162,6 +158,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
             >,
         >,
     ) -> windows_core::Result<Foundation::EventRegistrationToken> {
+        let _ = handler;
         Ok(EventRegistrationToken { Value: 1 })
     }
 
@@ -169,6 +166,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         &self,
         token: &Foundation::EventRegistrationToken,
     ) -> windows_core::Result<()> {
+        let _ = token;
         todo!()
     }
 
@@ -181,6 +179,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
             >,
         >,
     ) -> windows_core::Result<Foundation::EventRegistrationToken> {
+        let _ = handler;
         todo!()
     }
 
@@ -188,6 +187,7 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         &self,
         token: &Foundation::EventRegistrationToken,
     ) -> windows_core::Result<()> {
+        let _ = token;
         todo!()
     }
 }
@@ -254,6 +254,7 @@ impl ISystemMediaTransportControlsDisplayUpdater_Impl for DisplayUpdater {
     }
 
     fn SetAppMediaId(&self, value: &windows_core::HSTRING) -> windows_core::Result<()> {
+        let _ = value;
         todo!()
     }
 
@@ -267,6 +268,7 @@ impl ISystemMediaTransportControlsDisplayUpdater_Impl for DisplayUpdater {
         &self,
         value: Option<&windows::Storage::Streams::RandomAccessStreamReference>,
     ) -> windows_core::Result<()> {
+        let _ = value;
         todo!()
     }
 
@@ -287,6 +289,8 @@ impl ISystemMediaTransportControlsDisplayUpdater_Impl for DisplayUpdater {
         r#type: windows::Media::MediaPlaybackType,
         source: Option<&windows::Storage::StorageFile>,
     ) -> windows_core::Result<windows::Foundation::IAsyncOperation<bool>> {
+        let _ = source;
+        let _ = r#type;
         todo!()
     }
 

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use log::{info, warn};
+use log::info;
 use windows::{
     core::*,
     Win32::{Foundation::*, System::WinRT::*},
@@ -39,7 +39,6 @@ impl ISystemMediaTransportControlsInterop_Impl for ActivationFactory {
             .entry(appwindow.0)
             .or_insert_with(|| MediaControls::new(appwindow).into())
             .clone();
-        // let result: SystemMediaTransportControls = MediaControls::new(appwindow).into();
 
         unsafe {
             core::ptr::write(mediatransportcontrol, core::mem::transmute_copy(&result));
