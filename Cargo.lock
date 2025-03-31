@@ -475,6 +475,7 @@ name = "mediacontrol"
 version = "0.1.0"
 dependencies = [
  "futures",
+ "log",
  "mpris-server",
  "tokio",
  "tracing-subscriber",

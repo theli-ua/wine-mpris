@@ -36,6 +36,7 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
                 let window_title = window_title.replace(' ', ".");
                 info!("Spawning player");
                 let player = Player::builder(&window_title)
+                    .identity(window_title)
                     .can_play(true)
                     .can_pause(true)
                     .can_go_previous(true)

@@ -8,6 +8,7 @@ license = "MIT"
 crate-type = ["cdylib"]
 
 [dependencies]
+log = "0.4"
 futures = "0.3.31"
 mpris-server = "0.8.1"
 tokio = { version = "1", features = ["rt", "net", "sync"] }
