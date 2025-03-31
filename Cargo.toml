@@ -8,12 +8,9 @@ license = "MIT"
 crate-type = ["cdylib"]
 
 [dependencies]
-env_logger = "0.11.3"
 futures = "0.3.31"
-log = "0.4.21"
 mpris-server = "0.8.1"
 tokio = { version = "1", features = ["rt", "net", "sync"] }
-tracing-log = "0.2.0"
 tracing-subscriber = "0.3.19"
 windows = {version = "0.54.0", features = [
   "implement",
@@ -27,7 +24,6 @@ windows = {version = "0.54.0", features = [
 ]}
 windows-core = "0.54.0"
 windows-interface = "0.53.0"
-wine-macro = "*"
 zbus = { version = "*", default-features = false, features = ["async-io", "wine"] }
 [patch.crates-io]
 zbus = { path = "zbus/zbus" }
