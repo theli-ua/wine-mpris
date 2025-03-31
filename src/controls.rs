@@ -1,21 +1,99 @@
-use log::debug;
-// use mpris_server::Player;
-use windows::{
-    core::implement,
-    Foundation::{self, EventRegistrationToken},
-    Win32::Foundation::HWND,
+use std::{
+    collections::HashMap,
+    sync::{atomic::AtomicI64, Arc, Mutex},
 };
 
 use crate::{bindings::Media::*, mpris::send_command};
+use log::debug;
+use windows::{
+    core::implement,
+    Foundation::{self, EventRegistrationToken},
+    Media::SystemMediaTransportControlsButton,
+    Win32::Foundation::HWND,
+};
+
+pub struct EventHandlers {
+    event_token: AtomicI64,
+    event_handlers: Mutex<
+        HashMap<
+            i64,
+            Foundation::TypedEventHandler<
+                SystemMediaTransportControls,
+                SystemMediaTransportControlsButtonPressedEventArgs,
+            >,
+        >,
+    >,
+    caller: Option<SystemMediaTransportControls>,
+}
+unsafe impl Send for EventHandlers {}
+unsafe impl Sync for EventHandlers {}
+
+#[implement(SystemMediaTransportControlsButtonPressedEventArgs)]
+struct ButtonEventArgs(SystemMediaTransportControlsButton);
+
+impl ISystemMediaTransportControlsButtonPressedEventArgs_Impl for ButtonEventArgs {
+    fn Button(&self) -> windows_core::Result<SystemMediaTransportControlsButton> {
+        Ok(self.0)
+    }
+}
+
+impl ButtonEventArgs_Impl {}
+
+impl EventHandlers {
+    fn add_handler(
+        &self,
+        handler: Option<
+            &Foundation::TypedEventHandler<
+                SystemMediaTransportControls,
+                SystemMediaTransportControlsButtonPressedEventArgs,
+            >,
+        >,
+    ) -> windows_core::Result<Foundation::EventRegistrationToken> {
+        let Value = self
+            .event_token
+            .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+
+        self.event_handlers
+            .lock()
+            .unwrap()
+            .insert(Value, handler.unwrap().clone());
+
+        Ok(EventRegistrationToken { Value })
+    }
+
+    fn remove_handler(&self, key: i64) {
+        self.event_handlers.lock().unwrap().remove(&key);
+    }
+
+    pub fn invoke(&self, button: SystemMediaTransportControlsButton) {
+        let system_media_transport_controls_button_pressed_event_args =
+            SystemMediaTransportControlsButtonPressedEventArgs::from(ButtonEventArgs(button));
+        for handler in self.event_handlers.lock().unwrap().values() {
+            handler
+                .Invoke(
+                    self.caller.as_ref(),
+                    &system_media_transport_controls_button_pressed_event_args,
+                )
+                .unwrap();
+        }
+    }
+}
+
 #[implement(SystemMediaTransportControls)]
 pub struct MediaControls {
     appwindow: HWND,
     display_updater: SystemMediaTransportControlsDisplayUpdater,
+    event_handlers: Arc<EventHandlers>,
 }
 
 impl MediaControls {
     pub fn new(appwindow: HWND) -> Self {
-        crate::mpris::spawn_player(appwindow);
+        let event_handlers = Arc::new(EventHandlers {
+            event_token: 0.into(),
+            event_handlers: Mutex::default(),
+            caller: None,
+        });
+        crate::mpris::spawn_player(appwindow, event_handlers.clone());
 
         let display_updater = DisplayUpdater {
             music: MusicDisplayPropertiesImpl { hwnd: appwindow }.into(),
@@ -24,6 +102,7 @@ impl MediaControls {
         Self {
             appwindow,
             display_updater,
+            event_handlers,
         }
     }
 }
@@ -154,20 +233,19 @@ impl ISystemMediaTransportControls_Impl for MediaControls {
         handler: Option<
             &Foundation::TypedEventHandler<
                 SystemMediaTransportControls,
-                windows::Media::SystemMediaTransportControlsButtonPressedEventArgs,
+                SystemMediaTransportControlsButtonPressedEventArgs,
             >,
         >,
     ) -> windows_core::Result<Foundation::EventRegistrationToken> {
-        let _ = handler;
-        Ok(EventRegistrationToken { Value: 1 })
+        self.event_handlers.add_handler(handler)
     }
 
     fn RemoveButtonPressed(
         &self,
         token: &Foundation::EventRegistrationToken,
     ) -> windows_core::Result<()> {
-        let _ = token;
-        todo!()
+        self.event_handlers.remove_handler(token.Value);
+        Ok(())
     }
 
     fn PropertyChanged(

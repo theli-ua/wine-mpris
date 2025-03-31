@@ -1,7 +1,12 @@
-use std::{collections::HashMap, mem::MaybeUninit, rc::Rc, sync::OnceLock};
+use std::{
+    collections::HashMap,
+    mem::MaybeUninit,
+    rc::Rc,
+    sync::{Arc, OnceLock},
+};
 
 use log::info;
-use mpris_server::Player;
+use mpris_server::{PlaybackStatus, Player};
 use tokio::{
     sync::mpsc::{self, UnboundedReceiver},
     task::LocalSet,
@@ -11,10 +16,12 @@ use windows::{
     Win32::{Foundation::HWND, UI::WindowsAndMessaging::GetWindowTextW},
 };
 
+use crate::controls::EventHandlers;
+
 static TX: OnceLock<mpsc::UnboundedSender<Command>> = OnceLock::new();
 
 pub enum Command {
-    SpawnPlayer(HWND),
+    SpawnPlayer(HWND, Arc<EventHandlers>),
     SetTitle(HWND, String),
     SetArtist(HWND, String),
     SetState(HWND, windows::Media::MediaPlaybackStatus),
@@ -24,7 +31,7 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
     let mut players = HashMap::new();
     while let Some(m) = rx.recv().await {
         match m {
-            Command::SpawnPlayer(hwnd) => {
+            Command::SpawnPlayer(hwnd, handlers) => {
                 let window_title = unsafe {
                     let mut v: [u16; 255] = {
                         let val = MaybeUninit::uninit();
@@ -46,18 +53,31 @@ pub async fn mpris_local_task(mut rx: UnboundedReceiver<Command>) {
                     .unwrap();
 
                 // Handle `PlayPause` method call
-                player.connect_play_pause(|_player| {
+                let handlers_clone = handlers.clone();
+                player.connect_play_pause(move |player| {
                     info!("PlayPause");
+                    if player.playback_status() == PlaybackStatus::Playing {
+                        handlers_clone
+                            .invoke(windows::Media::SystemMediaTransportControlsButton::Pause);
+                    } else if player.playback_status() == PlaybackStatus::Paused {
+                        handlers_clone
+                            .invoke(windows::Media::SystemMediaTransportControlsButton::Play);
+                    }
                 });
 
                 // Handle `Previous` method call
-                player.connect_previous(|_player| {
+                let handlers_clone = handlers.clone();
+                player.connect_previous(move |_player| {
                     info!("Previous");
+                    handlers_clone
+                        .invoke(windows::Media::SystemMediaTransportControlsButton::Previous);
                 });
 
                 // Handle `Next` method call
-                player.connect_next(|_player| {
+                let handlers_clone = handlers.clone();
+                player.connect_next(move |_player| {
                     info!("Next");
+                    handlers_clone.invoke(windows::Media::SystemMediaTransportControlsButton::Next);
                 });
                 let player = Rc::new(player);
                 players.insert(hwnd.0, player.clone());
@@ -108,8 +128,8 @@ fn get_tx() -> &'static mpsc::UnboundedSender<Command> {
     })
 }
 
-pub fn spawn_player(hwnd: HWND) {
-    get_tx().send(Command::SpawnPlayer(hwnd)).unwrap();
+pub fn spawn_player(hwnd: HWND, handlers: Arc<EventHandlers>) {
+    get_tx().send(Command::SpawnPlayer(hwnd, handlers)).unwrap();
 }
 
 pub fn send_command(cmd: Command) {

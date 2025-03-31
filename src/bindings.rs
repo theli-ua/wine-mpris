@@ -10,6 +10,104 @@
 use windows::Foundation;
 pub mod Media {
     use windows::Media::*;
+
+    windows_core::imp::com_interface!(
+        ISystemMediaTransportControlsButtonPressedEventArgs,
+        ISystemMediaTransportControlsButtonPressedEventArgs_Vtbl,
+        0xb7f47116_a56f_4dc8_9e11_92031f4a87c2
+    );
+    #[repr(C)]
+    pub struct ISystemMediaTransportControlsButtonPressedEventArgs_Vtbl {
+        pub base__: windows_core::IInspectable_Vtbl,
+        pub Button: unsafe extern "system" fn(
+            *mut core::ffi::c_void,
+            *mut SystemMediaTransportControlsButton,
+        ) -> windows_core::HRESULT,
+    }
+
+    #[repr(transparent)]
+    #[derive(PartialEq, Eq, core::fmt::Debug, Clone)]
+    pub struct SystemMediaTransportControlsButtonPressedEventArgs(windows_core::IUnknown);
+    windows_core::imp::interface_hierarchy!(
+        SystemMediaTransportControlsButtonPressedEventArgs,
+        windows_core::IUnknown,
+        windows_core::IInspectable
+    );
+    impl SystemMediaTransportControlsButtonPressedEventArgs {
+        pub fn Button(&self) -> windows_core::Result<SystemMediaTransportControlsButton> {
+            let this = self;
+            unsafe {
+                let mut result__ = std::mem::zeroed();
+                (windows_core::Interface::vtable(this).Button)(
+                    windows_core::Interface::as_raw(this),
+                    &mut result__,
+                )
+                .map(|| result__)
+            }
+        }
+    }
+
+    impl windows_core::RuntimeType for SystemMediaTransportControlsButtonPressedEventArgs {
+        const SIGNATURE: windows_core::imp::ConstBuffer =
+            windows_core::imp::ConstBuffer::for_class::<Self>();
+    }
+    unsafe impl windows_core::Interface for SystemMediaTransportControlsButtonPressedEventArgs {
+        type Vtable = ISystemMediaTransportControlsButtonPressedEventArgs_Vtbl;
+        const IID: windows_core::GUID =
+            <ISystemMediaTransportControlsButtonPressedEventArgs as windows_core::Interface>::IID;
+    }
+    impl windows_core::RuntimeName for SystemMediaTransportControlsButtonPressedEventArgs {
+        const NAME: &'static str =
+            "Windows.Media.SystemMediaTransportControlsButtonPressedEventArgs";
+    }
+    unsafe impl Send for SystemMediaTransportControlsButtonPressedEventArgs {}
+    unsafe impl Sync for SystemMediaTransportControlsButtonPressedEventArgs {}
+
+    pub trait ISystemMediaTransportControlsButtonPressedEventArgs_Impl: Sized {
+        fn Button(&self) -> windows_core::Result<SystemMediaTransportControlsButton>;
+    }
+    impl windows_core::RuntimeName for ISystemMediaTransportControlsButtonPressedEventArgs {
+        const NAME: &'static str =
+            "Windows.Media.ISystemMediaTransportControlsButtonPressedEventArgs";
+    }
+    impl ISystemMediaTransportControlsButtonPressedEventArgs_Vtbl {
+        pub const fn new<
+            Identity: windows_core::IUnknownImpl<Impl = Impl>,
+            Impl: ISystemMediaTransportControlsButtonPressedEventArgs_Impl,
+            const OFFSET: isize,
+        >() -> ISystemMediaTransportControlsButtonPressedEventArgs_Vtbl {
+            unsafe extern "system" fn Button<
+                Identity: windows_core::IUnknownImpl<Impl = Impl>,
+                Impl: ISystemMediaTransportControlsButtonPressedEventArgs_Impl,
+                const OFFSET: isize,
+            >(
+                this: *mut core::ffi::c_void,
+                result__: *mut SystemMediaTransportControlsButton,
+            ) -> windows_core::HRESULT {
+                let this = (this as *const *const ()).offset(OFFSET) as *const Identity;
+                let this = (*this).get_impl();
+                match this.Button() {
+                    Ok(ok__) => {
+                        core::ptr::write(result__, core::mem::transmute_copy(&ok__));
+                        windows_core::HRESULT(0)
+                    }
+                    Err(err) => err.into(),
+                }
+            }
+            Self {
+                base__: windows_core::IInspectable_Vtbl::new::<
+                    Identity,
+                    ISystemMediaTransportControlsButtonPressedEventArgs,
+                    OFFSET,
+                >(),
+                Button: Button::<Identity, Impl, OFFSET>,
+            }
+        }
+        pub fn matches(iid: &windows_core::GUID) -> bool {
+            iid == & < ISystemMediaTransportControlsButtonPressedEventArgs < > as windows_core::Interface >::IID
+        }
+    }
+
     windows_core::imp::com_interface!(
         ISystemMediaTransportControls,
         ISystemMediaTransportControls_Vtbl,
